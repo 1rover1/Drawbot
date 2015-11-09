@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2f54a4b7b34e72397eb9d84b30291805",
-    "content-hash": "bbf3f35374dc9eb63e8e24c53c33ef4d",
+    "hash": "3aaf3ecf67f32902694fb2ee281681e7",
+    "content-hash": "972d9281d53624811549eb4a56fcf7bc",
     "packages": [
         {
             "name": "league/climate",
@@ -107,6 +107,51 @@
             "time": "2015-04-30 20:24:49"
         },
         {
+            "name": "timesplinter/gphpio",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TiMESPLiNTER/gphpio.git",
+                "reference": "51ae323884f37ec9ff575b7458364b6597dd76b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TiMESPLiNTER/gphpio/zipball/51ae323884f37ec9ff575b7458364b6597dd76b4",
+                "reference": "51ae323884f37ec9ff575b7458364b6597dd76b4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "timesplinter\\": "src/timesplinter/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pascal Muenst",
+                    "email": "dev@timesplinter.ch",
+                    "homepage": "http://www.timesplinter.ch",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Library to handle GPIO",
+            "homepage": "http://github.com/TiMESPLiNTER/gphpio",
+            "keywords": [
+                "GPIO",
+                "RaspberryPi",
+                "rpi",
+                "rpi2"
+            ],
+            "time": "2015-06-25 15:52:19"
+        },
+        {
             "name": "webignition/json-pretty-print",
             "version": "0.1",
             "source": {
@@ -152,8 +197,10 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
-    "prefer-stable": false,
+    "stability-flags": {
+        "timesplinter/gphpio": 20
+    },
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": []

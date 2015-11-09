@@ -7,8 +7,10 @@
             "email": "hello@joel.ly"
         }
     ],
+    "prefer-stable": true,
     "require": {
         "webignition/json-pretty-print": "^0.1.0",
-        "league/climate": "^3.2"
+        "league/climate": "^3.2",
+        "timesplinter/gphpio": "*@dev"
     }
 }
