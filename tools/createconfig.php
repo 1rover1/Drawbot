@@ -8,8 +8,9 @@ use webignition\JsonPrettyPrinter\JsonPrettyPrinter;
 echo "Creating template config file\n";
 
 $config = json_encode([
+
     "motor_left" => [
-        "gpio" => "1,2,3,4",
+        "gpio" => "6,13,19,26",
         "direction" => 1,
         "speed" => "low",
         "calibration" => [
@@ -19,8 +20,8 @@ $config = json_encode([
     ],
 
     "motor_right" => [
-        "gpio" => "1,2,3,4",
-        "direction" => 1,
+        "gpio" => "24,25,8,7",
+        "direction" => -1,
         "speed" => "low",
         "calibration" => [
             "pips" => 10000,
@@ -28,14 +29,14 @@ $config = json_encode([
         ]
     ],
 
-    "motor_distance" => 990,
+    "measurement_unit" => "mm",
+    "motor_distance" => 1040,
     "page" => [
         "top" => 300,
-        "left" => 150,
-        "width" => 550,
-        "height" => 750
-    ],
-    "measurement_unit" => "mm"
+        "left" => 170,
+        "width" => 700,
+        "height" => 1000
+    ]
 
 ]);
 
