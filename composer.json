@@ -1,0 +1,13 @@
+{
+    "name": "1rover1/ann-droid-artist",
+    "license": "GPL v2",
+    "authors": [
+        {
+            "name": "Joelly",
+            "email": "hello@joel.ly"
+        }
+    ],
+    "require": {
+        "league/climate": "^3.2"
+    }
+}
