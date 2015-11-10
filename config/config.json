@@ -14,7 +14,7 @@
     "speed": "low",
     "calibration": {
       "pips": 10000,
-      "units": 539
+      "distance": 539
     }
   },
   "measurement_unit": "mm",
@@ -24,5 +24,9 @@
     "left": 170,
     "width": 700,
     "height": 1000
+  },
+  "pen": {
+    "left": 500,
+    "right": 600
   }
 }

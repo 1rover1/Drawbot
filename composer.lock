@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3aaf3ecf67f32902694fb2ee281681e7",
-    "content-hash": "972d9281d53624811549eb4a56fcf7bc",
+    "hash": "2ee18482786f502795ea8d4b20ac6f06",
+    "content-hash": "cd87a8a47744d14580a758bd124464b5",
     "packages": [
         {
             "name": "league/climate",
@@ -57,6 +57,54 @@
                 "terminal"
             ],
             "time": "2015-08-13 16:50:51"
+        },
+        {
+            "name": "php-units-of-measure/php-units-of-measure",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PhpUnitsOfMeasure/php-units-of-measure.git",
+                "reference": "84ac8e1343fbf1a4a6278b42fbc98c6b8c9d02d5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PhpUnitsOfMeasure/php-units-of-measure/zipball/84ac8e1343fbf1a4a6278b42fbc98c6b8c9d02d5",
+                "reference": "84ac8e1343fbf1a4a6278b42fbc98c6b8c9d02d5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.4.*",
+                "squizlabs/php_codesniffer": "2.0.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhpUnitsOfMeasure\\": "source/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Hanson",
+                    "email": "jonathan@jonathan-hanson.org",
+                    "homepage": "http://www.jonathan-hanson.org/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A PHP library for converting between standard units of measure.",
+            "homepage": "https://github.com/triplepoint/php-units-of-measure",
+            "keywords": [
+                "conversion",
+                "data",
+                "measurements"
+            ],
+            "time": "2015-03-14 21:49:57"
         },
         {
             "name": "seld/cli-prompt",

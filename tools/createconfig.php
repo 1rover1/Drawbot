@@ -25,7 +25,7 @@ $config = json_encode([
         "speed" => "low",
         "calibration" => [
             "pips" => 10000,
-            "units" => 539
+            "distance" => 539
         ]
     ],
 
@@ -36,6 +36,10 @@ $config = json_encode([
         "left" => 170,
         "width" => 700,
         "height" => 1000
+    ],
+    "pen" => [
+        "left" => 500,
+        "right" => 600
     ]
 
 ]);
