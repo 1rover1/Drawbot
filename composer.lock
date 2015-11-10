@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2ee18482786f502795ea8d4b20ac6f06",
-    "content-hash": "cd87a8a47744d14580a758bd124464b5",
+    "hash": "47b0a995eb869b88be5cdee3d3bb8ef8",
+    "content-hash": "b0d98249d93de7373fc3bd3065aabf01",
     "packages": [
         {
             "name": "league/climate",
@@ -198,48 +198,6 @@
                 "rpi2"
             ],
             "time": "2015-06-25 15:52:19"
-        },
-        {
-            "name": "webignition/json-pretty-print",
-            "version": "0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webignition/json-pretty-print.git",
-                "reference": "20be6ae08c47a17421551a4c08413392bc41610a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webignition/json-pretty-print/zipball/20be6ae08c47a17421551a4c08413392bc41610a",
-                "reference": "20be6ae08c47a17421551a4c08413392bc41610a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jon Cram",
-                    "email": "jon@webignition.net"
-                }
-            ],
-            "description": "Prettifies a JSON string for human readability",
-            "homepage": "https://github.com/webignition/json-pretty-print",
-            "keywords": [
-                "formatter",
-                "json",
-                "pretty-print"
-            ],
-            "time": "2014-08-08 07:21:11"
         }
     ],
     "packages-dev": [],

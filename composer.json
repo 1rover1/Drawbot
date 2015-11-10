@@ -8,8 +8,12 @@
         }
     ],
     "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Rover2011\\": "src/"
+        }
+    },
     "require": {
-        "webignition/json-pretty-print": "^0.1.0",
         "league/climate": "^3.2",
         "timesplinter/gphpio": "*@dev",
         "php-units-of-measure/php-units-of-measure": "^2.0"
