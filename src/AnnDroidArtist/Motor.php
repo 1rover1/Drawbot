@@ -11,7 +11,6 @@ class Motor
     private $gpioPins;       // Comma separated list of 4 GPIO pins
     private $direction;      // 1 or -1 to indicate CW or CCW
     private $speed;          // high or low
-    private $length;         // Length of arm
 
     private $gpioController;
 
@@ -32,10 +31,6 @@ class Motor
 
         if (isset($config['speed'])) {
             $this->setSpeed($config['speed']);
-        }
-
-        if (isset($config['length'])) {
-            $this->setLength($config['length']);
         }
 
         // Set the pin step sequence
@@ -100,20 +95,6 @@ class Motor
     public function getSpeed()
     {
         return $this->speed;
-    }
-
-    public function setLength($value)
-    {
-        if (is_numeric($value)) {
-            $this->length = $value;
-        } else {
-            throw new \InvalidArgumentException('Length needs to be numeric');
-        }
-    }
-
-    public function getLength()
-    {
-        return $this->length;
     }
 
     public function reset()

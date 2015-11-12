@@ -2,14 +2,12 @@
   "motor_left": {
     "gpio": "6,13,19,26",
     "direction": "cw",
-    "speed": "low",
-    "length": 350
+    "speed": "high"
   },
   "motor_right": {
     "gpio": "24,25,8,7",
     "direction": "ccw",
-    "speed": "low",
-    "length": 800
+    "speed": "high"
   },
   "calibration": {
     "pips": 10000,
@@ -22,6 +20,10 @@
     "left": 170,
     "width": 700,
     "height": 1000
+  },
+  "arm_length": {
+    "left": 400,
+    "right": 800
   },
   "pen": {
     "left": 500,

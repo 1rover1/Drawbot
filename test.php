@@ -2,28 +2,27 @@
 
 include('vendor/autoload.php');
 
-//var_dump(range(2,27));
-//die();
-
-use Rover2011\AnnDroidArtist\Motor;
+use Rover2011\AnnDroidArtist\Plotter;
 
 $config = json_decode(file_get_contents('config/config.json'), true);
 
-$motorLeft = new Motor($config['motor_left']);
-$motorRight = new Motor($config['motor_right']);
+$plt = new Plotter($config);
 
-$motorLeft->reset();
-$motorRight->reset();
 
-for ($i = 0; $i<60; $i++) {
-    $motorLeft->lengthen();
-    $motorRight->lengthen();
+//$plt->penTo(1000,-1000);
 
-    usleep(5000);
-    //sleep(1);
+$radius = 2000;
+$pointCount = intval($radius / 2);
+$x = array();
+$y = array();
+
+for($i = 0; $i < $pointCount; $i++) {
+    $x[] = intval($radius * cos(2 * pi() * ($i + 1) / $pointCount)) - $radius;
+    $y[] = intval($radius * sin(2 * pi() * ($i + 1) / $pointCount));
 }
 
-$motorLeft->reset();
-$motorRight->reset();
+for($i = 0; $i < $pointCount; $i++) {
+    $plt->drawTo($x[$i], $y[$i]);
+}
 
 echo "Done\n";
