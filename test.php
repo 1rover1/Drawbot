@@ -11,18 +11,7 @@ $plt = new Plotter($config);
 
 //$plt->penTo(1000,-1000);
 
-$radius = 2000;
-$pointCount = intval($radius / 2);
-$x = array();
-$y = array();
-
-for($i = 0; $i < $pointCount; $i++) {
-    $x[] = intval($radius * cos(2 * pi() * ($i + 1) / $pointCount)) - $radius;
-    $y[] = intval($radius * sin(2 * pi() * ($i + 1) / $pointCount));
-}
-
-for($i = 0; $i < $pointCount; $i++) {
-    $plt->drawTo($x[$i], $y[$i]);
-}
+$plt->circleRight(600);
+$plt->circleLeft(400);
 
 echo "Done\n";

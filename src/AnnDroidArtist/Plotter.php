@@ -83,8 +83,36 @@ class Plotter
         }
     }
 
+    public function circleLeft($radius)
+    {
+        $this->circle($radius, -1);
+    }
+
+    public function circleRight($radius)
+    {
+        $this->circle($radius, 1);
+    }
+
+    private function circle($radius, $xDirection)
+    {
+        $pointCount = intval($radius / 2);
+        $x = array();
+        $y = array();
+
+        for($i = 0; $i < $pointCount; $i++) {
+            $x[] = $xDirection * ($radius - intval($radius * cos(2 * pi() * ($i + 1) / $pointCount)));
+            $y[] = intval($radius * sin(2 * pi() * ($i + 1) / $pointCount));
+        }
+
+        for($i = 0; $i < $pointCount; $i++) {
+            $this->drawTo($x[$i], $y[$i]);
+        }
+    }
+
     private function getDistance($x1, $y1, $x2, $y2)
     {
         return sqrt(pow($y2 - $y1, 2) + pow($x2 - $x1, 2));
     }
+
+    //private bipolarXToCartestian
 }
