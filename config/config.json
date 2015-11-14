@@ -19,7 +19,8 @@
     "top": 300,
     "left": 170,
     "width": 700,
-    "height": 1000
+    "height": 1000,
+    "margin": 60
   },
   "arm_length": {
     "left": 400,
