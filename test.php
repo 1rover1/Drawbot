@@ -1,3 +1,4 @@
+#!/usr/bin/php
 <?php
 
 include('vendor/autoload.php');
@@ -8,10 +9,10 @@ $config = json_decode(file_get_contents('config/config.json'), true);
 
 $plt = new Plotter($config);
 
+$currentX = $plt->getX();
+$currentY = $plt->getY();
 
-$plt->circleRight(600);
-$plt->circleLeft(400);
+$plt->drawTo($currentX - 100, $currentY);
 
 
-
-echo "Done\n";
+//var_dump(bipolarToCartesian(112, 112));
