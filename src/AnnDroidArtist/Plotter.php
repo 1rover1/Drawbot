@@ -7,8 +7,8 @@ use Rover2011\AnnDroidArtist\Motor;
 class Plotter
 {
     // Motors
-    private $leftMotor;      // Object to control left motor
-    private $rightMotor;     // Object to control right motor
+    public $leftMotor;      // Object to control left motor
+    public $rightMotor;     // Object to control right motor
 
     private $armLengthLeft;  // Length of line between left motor and gondola
     private $armLengthRight; // Length of line between right motor and gondola
@@ -36,14 +36,14 @@ class Plotter
         $this->ppu = $ppu;
 
         // Save all measurements in pips
-        $this->pageTop = intval($config['page']['top'] * $ppu);
-        $this->pageLeft = intval($config['page']['left'] * $ppu);
-        $this->pageWidth = intval($config['page']['width'] * $ppu);
-        $this->pageHeight = intval($config['page']['height'] * $ppu);
-        $this->pageMargin = intval($config['page']['margin'] * $ppu);
-        $this->motorDistance = intval($config['motor_distance'] * $ppu);
-        $this->armLengthLeft = intval($config['arm_length']['left'] * $ppu);
-        $this->armLengthRight = intval($config['arm_length']['right'] * $ppu);
+        $this->pageTop = $config['page']['top'] * $ppu;
+        $this->pageLeft = $config['page']['left'] * $ppu;
+        $this->pageWidth = $config['page']['width'] * $ppu;
+        $this->pageHeight = $config['page']['height'] * $ppu;
+        $this->pageMargin = $config['page']['margin'] * $ppu;
+        $this->motorDistance = $config['motor_distance'] * $ppu;
+        $this->armLengthLeft = $config['arm_length']['left'] * $ppu;
+        $this->armLengthRight = $config['arm_length']['right'] * $ppu;
     }
 
     public function __destruct()
@@ -54,17 +54,13 @@ class Plotter
 
     public function getX()
     {
-        // Get current x,y pen position
-        $penPosition = $this->toCartesian($this->armLengthLeft, $this->armLengthRight);
-
+        $penPosition = $this->bipolarToCartesian($this->armLengthLeft, $this->armLengthRight);
         return $penPosition['x'] / $this->ppu;
     }
 
     public function getY()
     {
-        // Get current x,y pen position
-        $penPosition = $this->toCartesian($this->armLengthLeft, $this->armLengthRight);
-
+        $penPosition = $this->bipolarToCartesian($this->armLengthLeft, $this->armLengthRight);
         return $penPosition['y'] / $this->ppu;
     }
 
@@ -74,96 +70,101 @@ class Plotter
         $destX *= $this->ppu;
         $destY *= $this->ppu;
 
-        // Get current x,y pen position
-        $penPosition = $this->toCartesian($this->armLengthLeft, $this->armLengthRight);
+        // Save pen start position
+        $penPosition = $this->bipolarToCartesian($this->armLengthLeft, $this->armLengthRight);
+        $startX = $penPosition['x'];
+        $startY = $penPosition['y'];
 
-        $distance = $this->getDistanceCartesian(
-            $penPosition['x'],
-            $penPosition['y'],
-            $destX,
-            $destY
-        );
+        $distance = $this->distanceBetweenPoints($startX, $startY, $destX, $destY);
 
         while ($distance > 5) {
-
             // There are four options, in order: shorten left arm, lengthen
-            // left arm, shorten right arm, lengthen right arm
-            $armLengthLeft = $this->armLengthLeft;
-            $armLengthRight = $this->armLengthRight;
+            // left arm, shorten right arm, lengthen right arm.
+            // Translate these options to cartesian and get distance to destination
+            $movementOptions = array();
 
-            $shortenLeft   = $this->toCartesian($armLengthLeft - 1, $armLengthRight);
-            $lengthenLeft  = $this->toCartesian($armLengthLeft + 1, $armLengthRight);
-            $shortenRight  = $this->toCartesian($armLengthLeft, $armLengthRight - 1);
-            $lengthenRight = $this->toCartesian($armLengthLeft, $armLengthRight + 1);
+            $pointShortenLeft = $this->bipolarToCartesian($this->armLengthLeft - 1, $this->armLengthRight);
+            $distShortenLeft   = $this->distanceBetweenPoints($pointShortenLeft['x'], $pointShortenLeft['y'], $destX, $destY);
 
-            // Translate these options to cartesian
-            $distShortenLeft   = $this->getDistanceCartesian(
-                $shortenLeft['x'],
-                $shortenLeft['y'],
-                $destX,
-                $destY
-            );
-            $distLengthenLeft  = $this->getDistanceCartesian(
-                $lengthenLeft['x'],
-                $lengthenLeft['y'],
-                $destX,
-                $destY
-            );
-            $distShortenRight  = $this->getDistanceCartesian(
-                $shortenRight['x'],
-                $shortenRight['y'],
-                $destX,
-                $destY
-            );
-            $distLengthenRight = $this->getDistanceCartesian(
-                $lengthenRight['x'],
-                $lengthenRight['y'],
-                $destX,
-                $destY
-            );
+            $pointLengthenLeft = $this->bipolarToCartesian($this->armLengthLeft + 1, $this->armLengthRight);
+            $distLengthenLeft  = $this->distanceBetweenPoints($pointLengthenLeft['x'], $pointLengthenLeft['y'], $destX, $destY);
 
-            // Check which option gives us the minimum distance to destination
+            $pointShortenRight = $this->bipolarToCartesian($this->armLengthLeft, $this->armLengthRight - 1);
+            $distShortenRight  = $this->distanceBetweenPoints($pointShortenRight['x'], $pointShortenRight['y'], $destX, $destY);
+
+            $pointLengthenRight = $this->bipolarToCartesian($this->armLengthLeft, $this->armLengthRight + 1);
+            $distLengthenRight = $this->distanceBetweenPoints($pointLengthenRight['x'], $pointLengthenRight['y'], $destX, $destY);
+
+            // Check which option gives us the minimum distance to destination.
+            // Make sure it doesn't stray too far from the line we're drawing.
             // Process accordingly
-            $minimum = min($distShortenLeft, $distLengthenLeft, $distShortenRight, $distLengthenRight);
+            $movementOptions = array($distShortenLeft, $distLengthenLeft, $distShortenRight, $distLengthenRight);
+            rsort($movementOptions, SORT_NUMERIC);
+
+            do {
+                $minimum = array_pop($movementOptions);
+                switch ($minimum) {
+                    case $distShortenLeft:
+                        $checkPoint = $pointShortenLeft;
+                        break;
+                    case $distLengthenLeft:
+                        $checkPoint = $pointLengthenLeft;
+                        break;
+                    case $distShortenRight:
+                        $checkPoint = $pointShortenRight;
+                        break;
+                    case $distLengthenRight:
+                        $checkPoint = $pointLengthenRight;
+                        break;
+                    default:
+                        throw new \Exception(
+                            "Unable to determine minimum distance between two " .
+                            "points when checking point-to-line distance."
+                        );
+                }
+
+                $distanceToLive = $this->distancePointToLine(
+                    $checkPoint['x'], $checkPoint['y'],
+                    $destX, $destY,
+                    $startX, $startY
+                );
+            } while ($minimum === null || $distanceToLive > 5);
+
             switch ($minimum) {
                 case $distShortenLeft:
-                    //$this->leftMotor->shorten();
+                    $this->leftMotor->shorten();
                     $this->armLengthLeft--;
-                    echo "\noption 1";
                     break;
                 case $distLengthenLeft:
-                    //$this->leftMotor->lengthen();
+                    $this->leftMotor->lengthen();
                     $this->armLengthLeft++;
-                    echo "\noption 2";
                     break;
                 case $distShortenRight:
-                    //$this->rightMotor->shorten();
+                    $this->rightMotor->shorten();
                     $this->armLengthRight--;
-                    echo "\noption 3";
                     break;
                 case $distLengthenRight:
-                    //$this->rightMotor->lengthen();
+                    $this->rightMotor->lengthen();
                     $this->armLengthRight++;
-                    echo "\noption 4";
                     break;
                 default:
-                    echo "error\n";
+                    throw new \Exception(
+                        "Unable to determine minimum distance between two points when turning motor."
+                    );
             }
 
             $distance = $minimum;
-
-            echo " $distance\n";
 
             usleep(5000);   // 5ms
         }
     }
 
-    private function getDistanceCartesian($x1, $y1, $x2, $y2)
+    private function distanceBetweenPoints($x1, $y1, $x2, $y2)
     {
         return sqrt(pow($y2 - $y1, 2) + pow($x2 - $x1, 2));
     }
 
-    public function toCartesian($r1, $r2)
+    private function bipolarToCartesian($r1, $r2)
     {
         // formula from http://mathworld.wolfram.com/BipolarCoordinates.html
 
@@ -174,10 +175,31 @@ class Plotter
         $y = -sqrt($y) / (4 * $c);
 
         return array(
-            'x' => intval($x),
-            'y' => intval($y)
+            'x' => $x,
+            'y' => $y
         );
     }
+
+    private function distancePointToLine($px, $py, $x1, $y1, $x2, $y2)
+    {
+        // formula from https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+        // Line defined by two points
+
+        $x0 = $px;
+        $y0 = $py;
+
+        $d = abs(($y2 - $y1) * $x0 - ($x2 - $x1) * $y0 + $x2 * $y1 - $y2 * $x1);
+        $d /= sqrt(pow($y2 - $y1, 2) + pow($x2 - $x1, 2));
+
+        return $d;
+    }
+
+
+
+
+
+
+
 
 
 

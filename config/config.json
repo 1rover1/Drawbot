@@ -11,7 +11,7 @@
   },
   "calibration": {
     "pips": 10000,
-    "distance": 539
+    "distance": 445
   },
   "motor_distance": 1040,
   "page": {
@@ -22,7 +22,7 @@
     "margin": 60
   },
   "arm_length": {
-    "left": 780,
-    "right": 730
+    "left": 760,
+    "right": 650
   }
 }

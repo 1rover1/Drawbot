@@ -5,14 +5,18 @@ include('vendor/autoload.php');
 
 use Rover2011\AnnDroidArtist\Plotter;
 
+
 $config = json_decode(file_get_contents('config/config.json'), true);
 
 $plt = new Plotter($config);
 
-$currentX = $plt->getX();
-$currentY = $plt->getY();
+// Draw 100mm square
+$size = 150;
 
-$plt->drawTo($currentX - 100, $currentY);
+$plt->drawTo($plt->getX()-$size, $plt->getY());
+$plt->drawTo($plt->getX(), $plt->getY()+$size);
+$plt->drawTo($plt->getX()+$size, $plt->getY());
+$plt->drawTo($plt->getX(), $plt->getY()-$size);
 
 
-//var_dump(bipolarToCartesian(112, 112));
+// 445 539
