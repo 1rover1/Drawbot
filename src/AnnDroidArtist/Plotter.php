@@ -97,7 +97,6 @@ class Plotter
 
             // Check which option gives us the minimum distance to destination.
             // Make sure it doesn't stray too far from the line we're drawing.
-            // Process accordingly
             $movementOptions = array($distShortenLeft, $distLengthenLeft, $distShortenRight, $distLengthenRight);
             rsort($movementOptions, SORT_NUMERIC);
 
@@ -130,6 +129,7 @@ class Plotter
                 );
             } while ($minimum === null || $distanceToLive > 5);
 
+            // Now we've got our point - process accordingly
             switch ($minimum) {
                 case $distShortenLeft:
                     $this->leftMotor->shorten();
@@ -194,20 +194,7 @@ class Plotter
         return $d;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /*
     public function circleLeft($radius)
     {
         $this->circle($radius, -1);
@@ -233,5 +220,5 @@ class Plotter
             $this->drawTo($x[$i], $y[$i]);
         }
     }
-
+    */
 }
