@@ -16,6 +16,6 @@
     "require": {
         "league/climate": "^3.2",
         "timesplinter/gphpio": "*@dev",
-        "php-units-of-measure/php-units-of-measure": "^2.0"
+        "phenx/php-svg-lib": "^0.1.0"
     }
 }

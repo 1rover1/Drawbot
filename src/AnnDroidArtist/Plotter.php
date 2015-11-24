@@ -9,19 +9,27 @@ class Plotter
     // Motors
     public $leftMotor;      // Object to control left motor
     public $rightMotor;     // Object to control right motor
+    private $simulate;       // Turns on/off actual movement by the plotter
+    const STEP_DELAY = 5;    // Minimum time between steps (milliseconds)
 
     private $armLengthLeft;  // Length of line between left motor and gondola
     private $armLengthRight; // Length of line between right motor and gondola
 
-    private $motorDistance;  // Horizontal ditance between motor centres
+    private $motorDistance;  // Horizontal distance between motor centres
 
+    private $penIsUp;        // If the pen is up or not
+
+    // Page attributes
     private $pageTop;        // Vertical distance between motor and page top
     private $pageLeft;       // Horizontal distance between left motor and page left
     private $pageWidth;      // Width of the page
     private $pageHeight;     // Height of the page
     private $pageMargin;     // Internal margin of the page (same all sides)
 
+    // Metrics
     private $ppu;
+    private $distanceTravelled;
+    private $distanceDrawn;
 
     public function __construct($config = null)
     {
@@ -44,12 +52,31 @@ class Plotter
         $this->motorDistance = $config['motor_distance'] * $ppu;
         $this->armLengthLeft = $config['arm_length']['left'] * $ppu;
         $this->armLengthRight = $config['arm_length']['right'] * $ppu;
+
+        $this->simulate = false;
+        if (isset($config['simulate'])) {
+            $this->simulate = $config['simulate'];
+        }
+
+        $this->distanceTravelled = 0;
+        $this->distanceDrawn = 0;
+        $this->penIsUp = false;
     }
 
     public function __destruct()
     {
         $this->leftMotor->reset();
         $this->rightMotor->reset();
+    }
+
+    public function getDistanceTravelled()
+    {
+        return $this->distanceTravelled / $this->ppu;
+    }
+
+    public function getDistanceDrawn()
+    {
+        return $this->distanceDrawn / $this->ppu;
     }
 
     public function getX()
@@ -64,11 +91,43 @@ class Plotter
         return $penPosition['y'] / $this->ppu;
     }
 
+    public function getWidth()
+    {
+        return ($this->pageWidth - 2 * $this->pageMargin) / $this->ppu;
+    }
+
+    public function getHeight()
+    {
+        return ($this->pageHeight - 2 * $this->pageMargin) / $this->ppu;
+    }
+
+    public function moveTo($destX, $destY)
+    {
+        $this->penUp();
+        $this->drawTo($destX, $destY);
+        $this->penDown();
+    }
+
+    public function penUp()
+    {
+        // TODO implement hardware/software to lift the pen off the page
+        $this->penIsUp = true;
+    }
+
+    public function penDown()
+    {
+        // TODO implement hardware/software to put pen back on the page
+        $this->penIsUp = false;
+    }
+
     public function drawTo($destX, $destY)
     {
         // Translate input coordinates to pips
-        $destX *= $this->ppu;
-        $destY *= $this->ppu;
+        $destX = -($this->motorDistance / 2) + $this->pageLeft + $this->pageMargin + $destX * $this->ppu; // normal
+        //$destX = -($this->motorDistance / 2) + $this->pageWidth - $this->pageMargin - $destX * $this->ppu; // flip horizontally
+
+        //$destY = -$this->pageTop - $this->pageMargin - $destY * $this->ppu; // normal
+        $destY = -$this->pageTop + $this->pageMargin - $this->pageHeight + $destY * $this->ppu; // flip vertically
 
         // Save pen start position
         $penPosition = $this->bipolarToCartesian($this->armLengthLeft, $this->armLengthRight);
@@ -77,7 +136,11 @@ class Plotter
 
         $distance = $this->distanceBetweenPoints($startX, $startY, $destX, $destY);
 
-        while ($distance > 5) {
+        // Stats
+        $this->distanceTravelled += $distance;
+        if ($this->penIsUp == false) $this->distanceDrawn += $distance;
+
+        while ($distance > 3) {
             // There are four options, in order: shorten left arm, lengthen
             // left arm, shorten right arm, lengthen right arm.
             // Translate these options to cartesian and get distance to destination
@@ -132,19 +195,19 @@ class Plotter
             // Now we've got our point - process accordingly
             switch ($minimum) {
                 case $distShortenLeft:
-                    $this->leftMotor->shorten();
+                    if ($this->simulate == false) $this->leftMotor->shorten();
                     $this->armLengthLeft--;
                     break;
                 case $distLengthenLeft:
-                    $this->leftMotor->lengthen();
+                    if ($this->simulate == false) $this->leftMotor->lengthen();
                     $this->armLengthLeft++;
                     break;
                 case $distShortenRight:
-                    $this->rightMotor->shorten();
+                    if ($this->simulate == false) $this->rightMotor->shorten();
                     $this->armLengthRight--;
                     break;
                 case $distLengthenRight:
-                    $this->rightMotor->lengthen();
+                    if ($this->simulate == false) $this->rightMotor->lengthen();
                     $this->armLengthRight++;
                     break;
                 default:
@@ -155,13 +218,13 @@ class Plotter
 
             $distance = $minimum;
 
-            usleep(5000);   // 5ms
+            if ($this->simulate == false) usleep(self::STEP_DELAY * 1000);   // 5ms
         }
     }
 
-    private function distanceBetweenPoints($x1, $y1, $x2, $y2)
+    public function distanceBetweenPoints($x1, $y1, $x2, $y2)
     {
-        return sqrt(pow($y2 - $y1, 2) + pow($x2 - $x1, 2));
+        return sqrt(($y2 - $y1) * ($y2 - $y1) + ($x2 - $x1) * ($x2 - $x1));
     }
 
     private function bipolarToCartesian($r1, $r2)
@@ -170,9 +233,9 @@ class Plotter
 
         $c = $this->motorDistance / 2;
 
-        $x = (($r1 * $r1) - ($r2 * $r2)) / (4 * $c);
-        $y = 16 * $c * $c * $r1 * $r1 - pow($r1 * $r1 - $r2 * $r2 + 4 * $c * $c, 2);
-        $y = -sqrt($y) / (4 * $c);
+        $x = (($r1 * $r1) - ($r2 * $r2)) * 0.25 / $c;
+        $y = 16 * $c * $c * $r1 * $r1 - ($r1 * $r1 - $r2 * $r2 + 4 * $c * $c) * ($r1 * $r1 - $r2 * $r2 + 4 * $c * $c);
+        $y = -sqrt($y) * 0.25 / $c;
 
         return array(
             'x' => $x,
@@ -185,11 +248,9 @@ class Plotter
         // formula from https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
         // Line defined by two points
 
-        $x0 = $px;
-        $y0 = $py;
-
-        $d = abs(($y2 - $y1) * $x0 - ($x2 - $x1) * $y0 + $x2 * $y1 - $y2 * $x1);
-        $d /= sqrt(pow($y2 - $y1, 2) + pow($x2 - $x1, 2));
+        $d = ($y2 - $y1) * $px - ($x2 - $x1) * $py + $x2 * $y1 - $y2 * $x1;
+        if ($d < 0) $d *= -1;
+        $d /= sqrt(($y2 - $y1) * ($y2 - $y1) + ($x2 - $x1) * ($x2 - $x1));
 
         return $d;
     }
