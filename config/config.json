@@ -16,14 +16,14 @@
   "motor_distance": 1160,
   "simulate": true,
   "page": {
-    "top": 0,
-    "left": 0,
-    "width": 1160,
+    "top": 150,
+    "left": 100,
+    "width": 960,
     "height": 500,
-    "margin": 150
+    "margin": 0
   },
   "arm_length": {
-    "left": 480,
-    "right": 830
+    "left": 550,
+    "right": 940
   }
 }

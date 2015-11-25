@@ -17,9 +17,10 @@ $config = json_decode(file_get_contents('config/config.json'), true);
 $plt = new Plotter($config);
 
 
-for ($i = 0; $i < 10000; $i++) {
-    $plt->rightMotor->shorten();
-    usleep (5000);
-}
+$plt->drawTo(0, 0);
+$plt->drawTo($plt->getWidth(), 0);
+$plt->drawTo($plt->getWidth(), $plt->getHeight());
+$plt->drawTo(0, $plt->getHeight());
+$plt->drawTo(0, 0);
 
 echo "Done.\n";
