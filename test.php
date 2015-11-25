@@ -19,9 +19,7 @@ $plt = new Plotter($config);
 
 // Load an SVG document
 
-//$fileName = 'images/nyree_stripe.svg';
 $fileName = 'images/st.svg';
-//$fileName = 'images/signature.svg';
 
 $svgDocument = new Document();
 $svgDocument->loadFile($fileName);

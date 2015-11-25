@@ -7,8 +7,8 @@ use Rover2011\AnnDroidArtist\Motor;
 class Plotter
 {
     // Motors
-    public $leftMotor;      // Object to control left motor
-    public $rightMotor;     // Object to control right motor
+    private $leftMotor;      // Object to control left motor
+    private $rightMotor;     // Object to control right motor
     private $simulate;       // Turns on/off actual movement by the plotter
     const STEP_DELAY = 5;    // Minimum time between steps (milliseconds)
 
@@ -33,11 +33,19 @@ class Plotter
 
     public function __construct($config = null)
     {
+        // Set simulation status first
+        $this->simulate = false;
+        if (isset($config['simulate'])) {
+            $this->simulate = $config['simulate'];
+        }
+
         // set up motors
-        $this->leftMotor = new Motor($config['motor_left']);
-        $this->rightMotor = new Motor($config['motor_right']);
-        $this->leftMotor->reset();
-        $this->rightMotor->reset();
+        if ($simulate === false) {
+            $this->leftMotor = new Motor($config['motor_left']);
+            $this->rightMotor = new Motor($config['motor_right']);
+            $this->leftMotor->reset();
+            $this->rightMotor->reset();
+        }
 
         // Pre-calculate Pips Per Unit (PPU)
         $ppu = $config['calibration']['pips'] / $config['calibration']['distance'];
@@ -53,11 +61,6 @@ class Plotter
         $this->armLengthLeft = $config['arm_length']['left'] * $ppu;
         $this->armLengthRight = $config['arm_length']['right'] * $ppu;
 
-        $this->simulate = false;
-        if (isset($config['simulate'])) {
-            $this->simulate = $config['simulate'];
-        }
-
         $this->distanceTravelled = 0;
         $this->distanceDrawn = 0;
         $this->penIsUp = false;
@@ -65,8 +68,10 @@ class Plotter
 
     public function __destruct()
     {
-        $this->leftMotor->reset();
-        $this->rightMotor->reset();
+        if ($this->simulate === false) {
+            $this->leftMotor->reset();
+            $this->rightMotor->reset();
+        }
     }
 
     public function getDistanceTravelled()

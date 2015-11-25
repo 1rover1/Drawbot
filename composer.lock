@@ -146,12 +146,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/TiMESPLiNTER/gphpio.git",
-                "reference": "51ae323884f37ec9ff575b7458364b6597dd76b4"
+                "reference": "ebc7567683102887ed632bcff3411c35011aa3e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/TiMESPLiNTER/gphpio/zipball/51ae323884f37ec9ff575b7458364b6597dd76b4",
-                "reference": "51ae323884f37ec9ff575b7458364b6597dd76b4",
+                "url": "https://api.github.com/repos/TiMESPLiNTER/gphpio/zipball/ebc7567683102887ed632bcff3411c35011aa3e5",
+                "reference": "ebc7567683102887ed632bcff3411c35011aa3e5",
                 "shasum": ""
             },
             "require": {
@@ -183,7 +183,7 @@
                 "rpi",
                 "rpi2"
             ],
-            "time": "2015-06-25 15:52:19"
+            "time": "2015-11-24 14:04:07"
         }
     ],
     "packages-dev": [],

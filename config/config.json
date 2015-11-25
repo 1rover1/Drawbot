@@ -14,7 +14,7 @@
     "distance": 445
   },
   "motor_distance": 1160,
-  "simulate": false,
+  "simulate": true,
   "page": {
     "top": 0,
     "left": 0,
