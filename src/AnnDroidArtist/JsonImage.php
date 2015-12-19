@@ -80,10 +80,17 @@ class JsonImage
         // to the pen and draw to it. It will continue to do this for each
         // polygon in the feature collection
 
-        // Pen position is to scale on the JsonImage coordinates
-        $pen[0] = 0; //$this->plotter->getX() / $this->plotter->getWidth() * $this->width;
-        $pen[1] = 0; //$this->plotter->getY() / $this->plotter->getHeight() * $this->height;
+        // Get pen position - in coordinates used by GeoJson
 
+        $pen[0] = $this->plotter->getX();                                                           // Is in plotter coords
+        $pen[0] = $pen[0] + $this->plotter->getMotorDistance() / 2 - $this->plotter->getPageLeft(); // Now in page coords
+        $pen[0] = $pen[0] / $this->plotter->getWidth() * $this->width;                              // Now in GeoJson coords
+
+        $pen[1] = abs($this->plotter->getY());                                                      // Is in plotter coords
+        //var_dump($pen[1]);
+        $pen[1] = $this->plotter->getPageTop() + $this->plotter->getHeight() - $pen[1];             // Now in page coords
+        //var_dump($pen[1]);
+        $pen[1] = $pen[1] / $this->plotter->getHeight() * $this->height;                            // Now in GeoJson coords
 
 
         $polygons = $this->drawing;

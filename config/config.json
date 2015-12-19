@@ -14,16 +14,15 @@
     "distance": 445
   },
   "motor_distance": 1050,
-  "simulate": false,
+  "simulate": true,
   "page": {
     "top": 265,
     "left": 410,
-    "width": 190,
-    "height": 275,
-    "margin": 0
+    "width": 180,
+    "height": 275
   },
   "arm_length": {
-    "left": 730,
-    "right": 720
+    "left": 670,
+    "right": 640
   }
 }

@@ -24,7 +24,6 @@ class Plotter
     private $pageLeft;       // Horizontal distance between left motor and page left
     private $pageWidth;      // Width of the page
     private $pageHeight;     // Height of the page
-    private $pageMargin;     // Internal margin of the page (same all sides)
 
     // Metrics
     private $ppu;
@@ -56,7 +55,6 @@ class Plotter
         $this->pageLeft = $config['page']['left'] * $ppu;
         $this->pageWidth = $config['page']['width'] * $ppu;
         $this->pageHeight = $config['page']['height'] * $ppu;
-        $this->pageMargin = $config['page']['margin'] * $ppu;
         $this->motorDistance = $config['motor_distance'] * $ppu;
         $this->armLengthLeft = $config['arm_length']['left'] * $ppu;
         $this->armLengthRight = $config['arm_length']['right'] * $ppu;
@@ -98,12 +96,27 @@ class Plotter
 
     public function getWidth()
     {
-        return ($this->pageWidth - 2 * $this->pageMargin) / $this->ppu;
+        return $this->pageWidth / $this->ppu;
     }
 
     public function getHeight()
     {
-        return ($this->pageHeight - 2 * $this->pageMargin) / $this->ppu;
+        return $this->pageHeight / $this->ppu;
+    }
+
+    public function getPageTop()
+    {
+        return $this->pageTop / $this->ppu;
+    }
+
+    public function getPageLeft()
+    {
+        return $this->pageLeft / $this->ppu;
+    }
+
+    public function getMotorDistance()
+    {
+        return $this->motorDistance / $this->ppu;
     }
 
     public function moveTo($destX, $destY)
@@ -128,11 +141,11 @@ class Plotter
     public function drawTo($destX, $destY)
     {
         // Translate input coordinates to pips
-        $destX = -($this->motorDistance / 2) + $this->pageLeft + $this->pageMargin + $destX * $this->ppu; // normal
-        //$destX = -($this->motorDistance / 2) + $this->pageWidth - $this->pageMargin - $destX * $this->ppu; // flip horizontally
+        $destX = -($this->motorDistance / 2) + $this->pageLeft + $destX * $this->ppu; // normal
+        //$destX = -($this->motorDistance / 2) + $this->pageWidth - $destX * $this->ppu; // flip horizontally
 
-        //$destY = -$this->pageTop - $this->pageMargin - $destY * $this->ppu; // normal
-        $destY = -$this->pageTop + $this->pageMargin - $this->pageHeight + $destY * $this->ppu; // flip vertically for GeoJson
+        //$destY = -$this->pageTop - $destY * $this->ppu; // normal
+        $destY = -$this->pageTop - $this->pageHeight + $destY * $this->ppu; // flip vertically for GeoJson
 
         // Save pen start position
         $penPosition = $this->bipolarToCartesian($this->armLengthLeft, $this->armLengthRight);
