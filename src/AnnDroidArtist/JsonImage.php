@@ -13,16 +13,15 @@ class JsonImage
 
     private $plotter;
 
-    public function __construct($filename)
+    public function __construct($filename, $plotter)
     {
         $this->loadFile($filename);
+        $this->plotter = $plotter;
     }
 
     protected function loadFile($filename)
     {
         $drawing = json_decode(file_get_contents($filename), true);
-
-        //$drawing = $this->optimise($drawing);
 
         // Get max/min values
         $minX = 9999999;
@@ -75,15 +74,64 @@ class JsonImage
         $this->height = $maxY + $minY;
     }
 
-    protected function optimise($original)
+    public function optimise()
     {
-        return $original;
+        // This optimise function will start off by finding the closest point
+        // to the pen and draw to it. It will continue to do this for each
+        // polygon in the feature collection
+
+        // Pen position is to scale on the JsonImage coordinates
+        $pen[0] = 0; //$this->plotter->getX() / $this->plotter->getWidth() * $this->width;
+        $pen[1] = 0; //$this->plotter->getY() / $this->plotter->getHeight() * $this->height;
+
+
+
+        $polygons = $this->drawing;
+        $optimisedDrawing = [];
+
+        $usedPolygons = 0;
+
+        while ($usedPolygons < count($polygons)) {
+
+            $minimumDistance = 99999;
+            $nextPolygon = -1;
+            $nextPolygonPoint = -1;
+
+            // Find the next closest point
+            for ($polygonIndex = 0; $polygonIndex < count($polygons); $polygonIndex++) {
+                if (!isset($polygons[$polygonIndex]['used'])) {
+                    for ($pointIndex = 0; $pointIndex < count($polygons[$polygonIndex]); $pointIndex++) {
+
+                        $distance = $this->distanceBetweenPoints($polygons[$polygonIndex][$pointIndex], $pen);
+                        if ($distance < $minimumDistance) {
+                            $minimumDistance = $distance;
+                            $nextPolygon = $polygonIndex;
+                            $nextPolygonPoint = $pointIndex;
+                        }
+
+                    }
+                }
+            }
+
+            // Copy that polygon into the optimised drawing, starting from the closest point
+            $optimisedDrawing[] = array_merge(
+                array_slice($polygons[$nextPolygon], $nextPolygonPoint),
+                array_slice($polygons[$nextPolygon], 0, $nextPolygonPoint)
+            );
+
+            // Update pen position
+            $pen = $optimisedDrawing[count($optimisedDrawing) - 1][0];
+
+            // Update statistics and counters and shit
+            $polygons[$nextPolygon]['used'] = true;
+            $usedPolygons++;
+        }
+
+        $this->drawing = $optimisedDrawing;
     }
 
-    public function render(Plotter $plotter)
+    public function render()
     {
-        $this->plotter = $plotter;
-
         foreach ($this->drawing as $polygon) {
 
             // Move pen to start of polygon
@@ -100,7 +148,6 @@ class JsonImage
             list ($drawX, $drawY) = $this->translateToPage($polygon[0][0], $polygon[0][1]);
             $this->plotter->moveTo($drawX, $drawY);
         }
-
     }
 
     private function setRatioAndOffsets()
@@ -127,6 +174,16 @@ class JsonImage
             $this->offsetX + $x * $this->ratio,
             $this->offsetY + $y * $this->ratio
         );
+    }
+
+    private function distanceBetweenPoints($point1, $point2)
+    {
+        $x1 = $point1[0];
+        $x2 = $point2[0];
+        $y1 = $point1[1];
+        $y2 = $point2[1];
+
+        return sqrt(($y2 - $y1) * ($y2 - $y1) + ($x2 - $x1) * ($x2 - $x1));
     }
 
 }
