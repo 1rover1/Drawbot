@@ -132,7 +132,7 @@ class Plotter
         //$destX = -($this->motorDistance / 2) + $this->pageWidth - $this->pageMargin - $destX * $this->ppu; // flip horizontally
 
         //$destY = -$this->pageTop - $this->pageMargin - $destY * $this->ppu; // normal
-        $destY = -$this->pageTop + $this->pageMargin - $this->pageHeight + $destY * $this->ppu; // flip vertically
+        $destY = -$this->pageTop + $this->pageMargin - $this->pageHeight + $destY * $this->ppu; // flip vertically for GeoJson
 
         // Save pen start position
         $penPosition = $this->bipolarToCartesian($this->armLengthLeft, $this->armLengthRight);

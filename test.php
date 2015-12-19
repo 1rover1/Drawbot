@@ -15,14 +15,19 @@ $plt = new Plotter($config);
 
 // Load an SVG document
 
-//$renderer = new JsonImage('images/dv.json');
+$renderer = new JsonImage('images/dv.json');
+$renderer->render($plt);
 
+
+
+/*
+// Draw the border
 $plt->moveTo(0               , 0);
 $plt->moveTo($plt->getWidth(), 0);
 $plt->moveTo($plt->getWidth(), $plt->getHeight());
 $plt->moveTo(0,                $plt->getHeight());
 $plt->moveTo(0               , 0);
-
+*/
 
 // Output the image
 //$svgDocument->render($plotterSurface);
