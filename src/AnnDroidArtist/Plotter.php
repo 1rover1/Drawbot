@@ -40,7 +40,7 @@ class Plotter
         }
 
         // set up motors
-        if ($simulate === false) {
+        if ($this->simulate === false) {
             $this->leftMotor = new Motor($config['motor_left']);
             $this->rightMotor = new Motor($config['motor_right']);
             $this->leftMotor->reset();

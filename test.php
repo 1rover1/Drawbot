@@ -4,12 +4,8 @@
 include('vendor/autoload.php');
 
 use Rover2011\AnnDroidArtist\Plotter;
+use Rover2011\AnnDroidArtist\JsonImage;
 
-use Rover2011\AnnDroidArtist\Driver\SurfaceAnnDroid;
-use Svg\Document;
-
-// PPU's
-// 445 539
 $startTime = time();
 
 // Create a plotter
@@ -19,25 +15,17 @@ $plt = new Plotter($config);
 
 // Load an SVG document
 
-//$fileName = 'images/st.svg';
-$fileName = 'images/signature.svg';
+//$renderer = new JsonImage('images/dv.json');
 
-
-$svgDocument = new Document();
-$svgDocument->loadFile($fileName);
-
-// Create a render surface for the plotter
-$documentSize = $svgDocument->getDimensions();
-$plotterSurface = new SurfaceAnnDroid(
-    $documentSize['width'],
-    $documentSize['height']
-);
-$plotterSurface->setPlotter($plt);
+$plt->moveTo(0               , 0);
+$plt->moveTo($plt->getWidth(), 0);
+$plt->moveTo($plt->getWidth(), $plt->getHeight());
+$plt->moveTo(0,                $plt->getHeight());
+$plt->moveTo(0               , 0);
 
 
 // Output the image
-$svgDocument->render($plotterSurface);
-
+//$svgDocument->render($plotterSurface);
 
 $endTime = time();
 
