@@ -13,16 +13,16 @@
     "pips": 10000,
     "distance": 445
   },
-  "motor_distance": 1050,
-  "simulate": true,
+  "motor_distance": 1040,
+  "simulate": false,
   "page": {
-    "top": 265,
-    "left": 410,
-    "width": 180,
-    "height": 275
+    "top": 290,
+    "left": 420,
+    "width": 170,
+    "height": 250
   },
   "arm_length": {
     "left": 670,
-    "right": 640
+    "right": 720
   }
 }

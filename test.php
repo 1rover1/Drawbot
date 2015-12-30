@@ -15,7 +15,7 @@ $plt = new Plotter($config);
 
 // Load an SVG document
 
-$output = new JsonImage('images/dv.json', $plt);
+$output = new JsonImage('images/el.json', $plt);
 $output->optimise();
 $output->render();
 
