@@ -13,8 +13,14 @@ class JsonImage
 
     private $plotter;
 
+    private $pointCount;
+    private $lineCount;
+
     public function __construct($filename, $plotter)
     {
+        $this->lineCount = 0;
+        $this->pointCount = 0;
+
         $this->loadFile($filename);
         $this->plotter = $plotter;
     }
@@ -49,6 +55,8 @@ class JsonImage
 
             $polygon = [];
 
+            $this->lineCount++;
+
             foreach ($feature['geometry']['coordinates'][0] as $point) {
                 // Check minimums and maximums
                 if ($point[0] < $minX) $minX = $point[0];
@@ -58,6 +66,8 @@ class JsonImage
 
                 // Add to polygon path
                 $polygon[] = $point;
+
+                $this->pointCount++;
             }
 
             // Remove the last point from the polygon, if it's the same as the first
@@ -74,6 +84,16 @@ class JsonImage
         $this->height = $maxY + $minY;
     }
 
+    public function getPointCount()
+    {
+        return $this->pointCount;
+    }
+
+    public function getLineCount()
+    {
+        return $this->lineCount;
+    }
+
     public function optimise()
     {
         // This optimise function will start off by finding the closest point
@@ -87,9 +107,7 @@ class JsonImage
         $pen[0] = $pen[0] / $this->plotter->getWidth() * $this->width;                              // Now in GeoJson coords
 
         $pen[1] = abs($this->plotter->getY());                                                      // Is in plotter coords
-        //var_dump($pen[1]);
         $pen[1] = $this->plotter->getPageTop() + $this->plotter->getHeight() - $pen[1];             // Now in page coords
-        //var_dump($pen[1]);
         $pen[1] = $pen[1] / $this->plotter->getHeight() * $this->height;                            // Now in GeoJson coords
 
 
@@ -132,6 +150,10 @@ class JsonImage
             // Update statistics and counters and shit
             $polygons[$nextPolygon]['used'] = true;
             $usedPolygons++;
+
+            if ($usedPolygons % 100 === 0) {
+                echo "Date: " . date("r") . " : " . round(100 * $usedPolygons / $this->getLineCount(), 2) . "\n";
+            }
         }
 
         $this->drawing = $optimisedDrawing;

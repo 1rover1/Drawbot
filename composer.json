@@ -16,6 +16,7 @@
     "require": {
         "league/climate": "^3.2",
         "timesplinter/gphpio": "*@dev",
-        "phenx/php-svg-lib": "^0.1.0"
+        "phenx/php-svg-lib": "^0.1.0",
+        "webignition/json-pretty-print": "^0.1.0"
     }
 }

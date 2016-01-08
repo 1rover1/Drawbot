@@ -30,8 +30,18 @@ class Plotter
     private $distanceTravelled;
     private $distanceDrawn;
 
+    // Update interval
+    private $updateInterval; // For
+
+    // Original config
+    private $originalConfig; // Easier to update the original config than to
+                             // reconstruct from working storage
+
     public function __construct($config = null)
     {
+        // Save a copy of the config
+        $this->originalConfig = $config;
+
         // Set simulation status first
         $this->simulate = false;
         if (isset($config['simulate'])) {
@@ -70,6 +80,15 @@ class Plotter
             $this->leftMotor->reset();
             $this->rightMotor->reset();
         }
+    }
+
+    public function getConfig()
+    {
+        $config = $this->originalConfig;
+        $config['arm_length']['left'] = intval($this->armLengthLeft / $this->ppu);
+        $config['arm_length']['right'] = intval($this->armLengthRight / $this->ppu);
+
+        return $config;
     }
 
     public function getDistanceTravelled()
@@ -203,12 +222,12 @@ class Plotter
                         );
                 }
 
-                $distanceToLive = $this->distancePointToLine(
+                $distanceToLine = $this->distancePointToLine(
                     $checkPoint['x'], $checkPoint['y'],
                     $destX, $destY,
                     $startX, $startY
                 );
-            } while ($minimum === null || $distanceToLive > 5);
+            } while ($minimum === null || $distanceToLine > 5);
 
             // Now we've got our point - process accordingly
             switch ($minimum) {
