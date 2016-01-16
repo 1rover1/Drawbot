@@ -11,16 +11,38 @@ $config = json_decode(file_get_contents('config/config.json'), true);
 $plt = new Plotter($config);
 
 
+$numSquares = 20;
 
+for($squareCounter = 0; $squareCounter < $numSquares; $squareCounter++) {
 
-for($i = 1; $i <= 10; $i++) {
-    if(($i % 2) == 1) {
-        $plt->moveTo($plt->getWidth() * $i / 10, 0);
-        $plt->drawTo(0, $plt->getHeight() - $plt->getHeight() * $i / 10);
-    } else {
-        $plt->moveTo(0, $plt->getHeight() - $plt->getHeight() * $i / 10);
-        $plt->drawTo($plt->getWidth() * $i / 10, 0);
-    }
+    $portion = $squareCounter / $numSquares;
+
+    echo "$portion\n";
+
+    $plt->moveTo(
+        $plt->getWidth() * $portion,
+        0
+    );
+
+    $plt->drawTo(
+        0,
+        $plt->getHeight() * (1 - $portion)
+    );
+
+    $plt->drawTo(
+        $plt->getWidth() * (1 - $portion),
+        $plt->getHeight()
+    );
+
+    $plt->drawTo(
+        $plt->getWidth(),
+        $plt->getHeight() * $portion
+    );
+
+    $plt->drawTo(
+        $plt->getWidth() * $portion,
+        0
+    );
 }
 
 
