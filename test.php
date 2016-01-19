@@ -8,7 +8,7 @@ use Rover2011\AnnDroidArtist\JsonImage;
 
 use webignition\JsonPrettyPrinter\JsonPrettyPrinter;
 
-$fileName = 'images/dv.json';
+$fileName = 'images/aubree.json';
 
 
 
@@ -17,7 +17,7 @@ $config = json_decode(file_get_contents('config/config.json'), true);
 $plt = new Plotter($config);
 
 echo "Date: " . date("r") . "\n";
-echo "Loading file: $fileName\n";
+echo "Filename: $fileName\n";
 
 // Load a document
 
@@ -33,13 +33,13 @@ if (true) {
     echo "Optimisation time: " . ($endTime - $startTime) . " seconds\n";
 }
 
-
+die();
 // Render the document
 
 $startTime = microtime(true);
 $output->render();
 $endTime = microtime(true);
-xit
+
 
 $x = $plt->getConfig();
 $y = json_encode($x);

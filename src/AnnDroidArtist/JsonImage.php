@@ -110,54 +110,63 @@ class JsonImage
         $pen[1] = $this->plotter->getPageTop() + $this->plotter->getHeight() - $pen[1];             // Now in page coords
         $pen[1] = $pen[1] / $this->plotter->getHeight() * $this->height;                            // Now in GeoJson coords
 
-
         $polygons = $this->drawing;
         $optimisedDrawing = [];
 
-        $usedPolygons = 0;
+        while (count($polygons) > 0) {
 
-        while ($usedPolygons < count($polygons)) {
+            $startTime = microtime(true);
 
-            $minimumDistance = 99999;
-            $nextPolygon = -1;
-            $nextPolygonPoint = -1;
+            $minimumDistance = 9999999;
+            $minDistPolygonKey = -1;
+            $minDistPointIndex = -1;
 
             // Find the next closest point
-            for ($polygonIndex = 0; $polygonIndex < count($polygons); $polygonIndex++) {
-                if (!isset($polygons[$polygonIndex]['used'])) {
-                    for ($pointIndex = 0; $pointIndex < count($polygons[$polygonIndex]); $pointIndex++) {
+            foreach ($polygons as $polygonKey => $polygonData) {
+                foreach ($polygonData as $pointIndex => $pointData) {
 
-                        $distance = $this->distanceBetweenPoints($polygons[$polygonIndex][$pointIndex], $pen);
-                        if ($distance < $minimumDistance) {
-                            $minimumDistance = $distance;
-                            $nextPolygon = $polygonIndex;
-                            $nextPolygonPoint = $pointIndex;
-                        }
-
+                    $distance = $this->distanceBetweenPoints($pointData, $pen);
+                    if ($distance < $minimumDistance) {
+                        $minimumDistance = $distance;
+                        $minDistPolygonKey = $polygonKey;
+                        $minDistPointIndex = $pointIndex;
                     }
+
                 }
             }
 
             // Copy that polygon into the optimised drawing, starting from the closest point
             $optimisedDrawing[] = array_merge(
-                array_slice($polygons[$nextPolygon], $nextPolygonPoint),
-                array_slice($polygons[$nextPolygon], 0, $nextPolygonPoint)
+                array_slice($polygons[$minDistPolygonKey], $minDistPointIndex),
+                array_slice($polygons[$minDistPolygonKey], 0, $minDistPointIndex)
             );
+            unset($polygons[$minDistPolygonKey]);
 
             // Update pen position
             $pen = $optimisedDrawing[count($optimisedDrawing) - 1][0];
 
-            // Update statistics and counters and shit
-            $polygons[$nextPolygon]['used'] = true;
-            $usedPolygons++;
-
-            if ($usedPolygons % 100 === 0) {
-                echo "Date: " . date("r") . " : " . round(100 * $usedPolygons / $this->getLineCount(), 2) . "\n";
-            }
+            // Stats
+            $timeTaken = microtime(true) - $startTime;
+            echo $timeTaken . "\n";
         }
 
         $this->drawing = $optimisedDrawing;
     }
+
+    public function showFileDebug()
+    {
+        $polyCount = 0;
+        $pointCount = 0;
+
+        foreach ($this->drawing as $key => $data) {
+            $polyCount++;
+            $pointCount += count($data);
+            echo "$key, " . count($data) . "\n";
+        }
+
+        echo "Polys: $polyCount    Points: $pointCount\n";
+    }
+
 
     public function render()
     {
