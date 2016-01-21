@@ -8,9 +8,7 @@ use Rover2011\AnnDroidArtist\JsonImage;
 
 use webignition\JsonPrettyPrinter\JsonPrettyPrinter;
 
-$fileName = 'images/aubree.json';
-
-
+$fileName = 'images/yoda.json';
 
 // Create a plotter
 $config = json_decode(file_get_contents('config/config.json'), true);
