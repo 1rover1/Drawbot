@@ -146,8 +146,8 @@ class JsonImage
             $pen = $optimisedDrawing[count($optimisedDrawing) - 1][0];
 
             // Stats
-            $timeTaken = microtime(true) - $startTime;
-            echo count($polygons) . "     "  . $timeTaken . "\n";
+            //$timeTaken = microtime(true) - $startTime;
+            //echo count($polygons) . "     "  . $timeTaken . "\n";
         }
 
         $this->drawing = $optimisedDrawing;

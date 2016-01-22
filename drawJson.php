@@ -5,10 +5,9 @@ include('vendor/autoload.php');
 
 use Rover2011\AnnDroidArtist\Plotter;
 use Rover2011\AnnDroidArtist\JsonImage;
+//use webignition\JsonPrettyPrinter\JsonPrettyPrinter;
 
-use webignition\JsonPrettyPrinter\JsonPrettyPrinter;
-
-$fileName = 'images/yoda.json';
+$fileName = 'images/dv.json';
 
 // Create a plotter
 $config = json_decode(file_get_contents('config/config.json'), true);
@@ -26,31 +25,33 @@ echo "Point count: " . $output->getPointCount() . "\n";
 if (true) {
     $startTime = microtime(true);
     $output->optimise();
-    $endTime = microtime(true);
+    $timeTaken = microtime(true) - $startTime;
 
-    echo "Optimisation time: " . ($endTime - $startTime) . " seconds\n";
+    echo "Optimisation time: " . round($timeTaken, 3) . " seconds\n";
+
+    if ($timeTaken > 60) {
+        readline ("Hit ENTER when you're ready.");
+    }
 }
 
-die();
 // Render the document
 
 $startTime = microtime(true);
 $output->render();
 $endTime = microtime(true);
 
-
+/*
 $x = $plt->getConfig();
 $y = json_encode($x);
 $z = new JsonPrettyPrinter();
 var_dump($z->format($y));
+*/
 
 // Output stats for this job
-
 echo "Distance drawn: " . intval($plt->getDistanceDrawn()) . " (in your chosen units)\n";
 echo "Distance with pen up: " . intval($plt->getDistanceTravelled() - $plt->getDistanceDrawn()) . " (in your chosen units)\n";
 echo "Total distance travelled: " . intval($plt->getDistanceTravelled()) . " (in your chosen unit)\n";
-echo "Time taken: " . ($endTime - $startTime) . " seconds\n";
-echo "Average speed: " . ($plt->getDistanceTravelled() / ($endTime - $startTime)) . "\n";
-
+echo "Time taken: " . round($endTime - $startTime, 3) . " seconds\n";
+echo "Average speed: " . round($plt->getDistanceTravelled() / ($endTime - $startTime), 3) . "\n";
 
 echo "Done.\n";
