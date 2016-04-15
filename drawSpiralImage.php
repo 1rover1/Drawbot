@@ -5,20 +5,19 @@ include('vendor/autoload.php');
 
 use Rover2011\AnnDroidArtist\Plotter;
 
+echo "Start: " . date("r") . "\n";
+
 // Create a plotter
 $config = json_decode(file_get_contents('config/config.json'), true);
 $plt = new Plotter($config);
 
 // The size of each "pixel" as it is on the drawn paper
 // Measured in human-units
-$pixelSize = 5;
+$pixelSize = 3;
 
 
 // Image file
-$inputFile = 'images/square.png';
-$inputFile = 'images/aub.jpg';
-$numColours = 3;
-
+$inputFile = 'images/kerry.jpg';
 
 // Check orientation
 if ($config['page']['width'] < $config['page']['height']) {
@@ -28,6 +27,7 @@ if ($config['page']['width'] < $config['page']['height']) {
 }
 
 // Load image
+$startTime = microtime(true);
 $img = new Imagick($inputFile);
 $img->quantizeImage(32, Imagick::COLORSPACE_GRAY, 0, false, false);
 
@@ -46,29 +46,62 @@ $img->extentImage(
 );
 
 $img->rotateImage(new ImagickPixel(), 180);
+echo "Loaded image $inputFile in " . round(microtime(true) - $startTime, 3) . " seconds\n";
 
-//$img->writeImage('output.jpg');
-//die();
 
-// Calculate some shit
-$numRotations = intval($maxDiameter / $pixelSize);
-$numDegrees = 360 * $numRotations;
+// Calculate list of points to draw
+$imageType = "vert-stripes";
+$pointList = array();
+$startTime = microtime(true);
+
+switch($imageType) {
+    case "spiral":
+        $numRotations = intval($maxDiameter / $pixelSize);
+        $numDegrees = 360 * $numRotations;
+
+        $pointList[] = array($plt->getWidth(), $plt->getHeight() / 2);
+        for($deg = 1; $deg <= $numDegrees; $deg += 0.5) {
+            $radius = $maxDiameter / 2 * ($numDegrees - $deg) / $numDegrees;
+            $x = $plt->getWidth() / 2  + cos($deg * 0.0174533) * $radius;
+            $y = $plt->getHeight() / 2 + sin($deg * 0.0174533) * $radius;
+
+            // Keep within bounds
+            if ($x > $plt->getWidth()) $x = $plt->getWidth();
+            if ($y > $plt->getHeight()) $y = $plt->getHeight();
+            if ($x < 0) $x = 0;
+            if ($y < 0) $y = 0;
+
+            $pointList[] = array($x, $y);
+        }
+        break;
+
+    case "vert-stripes":
+        $drawDirection = 1;
+
+        $pointList[] = array(0, 0);
+        for($x = 0; $x <= $plt->getWidth(); $x += $pixelSize) {
+            for($y = 0; $y <= $plt->getHeight(); $y += $pixelSize) {
+                $pointList[] = array(
+                    $x,
+                    ($drawDirection == 1 ? $y: $plt->getHeight() - $y)
+                );
+            }
+            $drawDirection = 1 - $drawDirection;
+        }
+        break;
+}
+echo "Generated $imageType point list in " . round(microtime(true) - $startTime, 3) . " seconds\n";
 
 $usedSectors = array();
 
-$plt->moveTo($plt->getWidth(), $plt->getHeight() / 2);
-for($deg = 1; $deg <= $numDegrees; $deg += 0.5) {
+$plt->moveTo($pointList[0][0], $pointList[0][1]);
+array_shift($pointList);
 
-    // Get new x,y coordinates
-    $radius = $maxDiameter / 2 * ($numDegrees - $deg) / $numDegrees;
-    $x = $plt->getWidth() / 2  + cos($deg * 0.0174533) * $radius;
-    $y = $plt->getHeight() / 2 + sin($deg * 0.0174533) * $radius;
+$startTime = microtime(true);
+foreach($pointList as $point) {
 
-    // Keep within bounds
-    if ($x > $plt->getWidth()) $x = $plt->getWidth();
-    if ($y > $plt->getHeight()) $y = $plt->getHeight();
-    if ($x < 0) $x = 0;
-    if ($y < 0) $y = 0;
+    $x = $point[0];
+    $y = $point[1];
 
     // Draw to new x,y
     $plt->drawTo($x, $y);
@@ -98,5 +131,6 @@ for($deg = 1; $deg <= $numDegrees; $deg += 0.5) {
     }
 
 }
-
+echo "Image drawn in " . round(microtime(true) - $startTime, 3) . " seconds\n";
+echo "Finish: " . date("r") . "\n";
 echo "Done.\n";
