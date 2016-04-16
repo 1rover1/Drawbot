@@ -3,6 +3,7 @@
 namespace Rover2011\AnnDroidArtist;
 
 use Rover2011\AnnDroidArtist\Motor;
+use webignition\JsonPrettyPrinter\JsonPrettyPrinter;
 
 class Plotter
 {
@@ -10,7 +11,9 @@ class Plotter
     private $leftMotor;      // Object to control left motor
     private $rightMotor;     // Object to control right motor
     private $simulate;       // Turns on/off actual movement by the plotter
+
     const STEP_DELAY = 5;    // Minimum time between steps (milliseconds)
+    private $lastMotorMovementTime;
 
     private $armLengthLeft;  // Length of line between left motor and gondola
     private $armLengthRight; // Length of line between right motor and gondola
@@ -77,8 +80,28 @@ class Plotter
     public function __destruct()
     {
         if ($this->simulate === false) {
+
+            // Turn off motors
             $this->leftMotor->reset();
             $this->rightMotor->reset();
+
+            // Save left/right arm lengths if it has changed
+            $armLengthLeft = $this->armLengthLeft / $this->ppu;
+            $armLengthRight = $this->armLengthRight / $this->ppu;
+            $origLengthLeft = $this->originalConfig['arm_length']['left'];
+            $origLengthRight = $this->originalConfig['arm_length']['right'];
+
+            if ($armLengthLeft != $origLengthLeft || $armLengthRight != $origLengthRight) {
+                $newConfig = $this->originalConfig;
+                $newConfig['arm_length']['left'] = $armLengthLeft;
+                $newConfig['arm_length']['right'] = $armLengthRight;
+
+                $formatter = new JsonPrettyPrinter;
+                $output = $formatter->format(json_encode($newConfig));
+
+                file_put_contents('config/config.json', $output);
+            }
+
         }
     }
 
@@ -177,7 +200,7 @@ class Plotter
         $this->distanceTravelled += $distance;
         if ($this->penIsUp == false) $this->distanceDrawn += $distance;
 
-        while ($distance > 3) {
+        while ($distance > 2) {
             // There are four options, in order: shorten left arm, lengthen
             // left arm, shorten right arm, lengthen right arm.
             // Translate these options to cartesian and get distance to destination
@@ -229,6 +252,12 @@ class Plotter
                 );
             } while ($minimum === null || $distanceToLine > 5);
 
+            if (!$this->simulate) {
+                do {
+                    $timeSinceLastMotorMovement = microtime(true) - $this->lastMotorMovementTime;
+                } while ($timeSinceLastMotorMovement <= self::STEP_DELAY / 1000);
+            }
+
             // Now we've got our point - process accordingly
             switch ($minimum) {
                 case $distShortenLeft:
@@ -255,7 +284,8 @@ class Plotter
 
             $distance = $minimum;
 
-            if ($this->simulate == false) usleep(self::STEP_DELAY * 1000);   // 5ms
+            // if ($this->simulate == false) usleep(self::STEP_DELAY * 1000);   // 5ms
+            if (!$this->simulate) $this->lastMotorMovementTime = microtime(true);
         }
     }
 
