@@ -1,3 +1,5 @@
 /vendor/
 Python/
 images/
+nohup.out
+config/config.json

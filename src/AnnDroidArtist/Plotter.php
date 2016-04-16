@@ -99,6 +99,9 @@ class Plotter
                 $formatter = new JsonPrettyPrinter;
                 $output = $formatter->format(json_encode($newConfig));
 
+                // TODO ideally this shouldn't be written directly to a file,
+                // since the config is initially given as an array. Find a
+                // better way to manage this.
                 file_put_contents('config/config.json', $output);
             }
 
@@ -201,9 +204,9 @@ class Plotter
         if ($this->penIsUp == false) $this->distanceDrawn += $distance;
 
         while ($distance > 2) {
-            // There are four options, in order: shorten left arm, lengthen
-            // left arm, shorten right arm, lengthen right arm.
-            // Translate these options to cartesian and get distance to destination
+            // There are four options, on how to draw: shorten/lengthen left
+            // arm, and shorten/lengthen right arm. Translate each option to
+            // cartesian and get distance to destination
             $movementOptions = array();
 
             $pointShortenLeft = $this->bipolarToCartesian($this->armLengthLeft - 1, $this->armLengthRight);
