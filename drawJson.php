@@ -7,7 +7,7 @@ use Rover2011\AnnDroidArtist\Plotter;
 use Rover2011\AnnDroidArtist\JsonImage;
 //use webignition\JsonPrettyPrinter\JsonPrettyPrinter;
 
-$fileName = 'images/dv.json';
+$fileName = 'images/michelle.json';
 
 // Create a plotter
 $config = json_decode(file_get_contents('config/config.json'), true);
@@ -29,7 +29,7 @@ if (true) {
 
     echo "Optimisation time: " . round($timeTaken, 3) . " seconds\n";
 
-    if ($timeTaken > 60) {
+    if ($timeTaken > 0) {
         readline ("Hit ENTER when you're ready.");
     }
 }
@@ -39,13 +39,6 @@ if (true) {
 $startTime = microtime(true);
 $output->render();
 $endTime = microtime(true);
-
-/*
-$x = $plt->getConfig();
-$y = json_encode($x);
-$z = new JsonPrettyPrinter();
-var_dump($z->format($y));
-*/
 
 // Output stats for this job
 echo "Distance drawn: " . intval($plt->getDistanceDrawn()) . " (in your chosen units)\n";
