@@ -146,21 +146,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/TiMESPLiNTER/gphpio.git",
-                "reference": "ebc7567683102887ed632bcff3411c35011aa3e5"
+                "reference": "afde198a37dcf9f1558313cfcd29b813e6d746a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/TiMESPLiNTER/gphpio/zipball/ebc7567683102887ed632bcff3411c35011aa3e5",
-                "reference": "ebc7567683102887ed632bcff3411c35011aa3e5",
+                "url": "https://api.github.com/repos/TiMESPLiNTER/gphpio/zipball/afde198a37dcf9f1558313cfcd29b813e6d746a8",
+                "reference": "afde198a37dcf9f1558313cfcd29b813e6d746a8",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5.0"
             },
+            "require-dev": {
+                "php-mock/php-mock-phpunit": "^2.0.1",
+                "phpunit/phpunit": "^6.4"
+            },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "timesplinter\\": "src/timesplinter/"
+                    "timesplinter\\gphpio\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -183,7 +187,7 @@
                 "rpi",
                 "rpi2"
             ],
-            "time": "2015-11-24 14:04:07"
+            "time": "2018-01-29 11:21:08"
         }
     ],
     "packages-dev": [],
