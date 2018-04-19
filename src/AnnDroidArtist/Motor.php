@@ -101,17 +101,19 @@ class Motor
     {
         for ($pinCounter = 0; $pinCounter < 4; $pinCounter++) {
 
+            $gpioPort = intval($this->gpioPins[$pinCounter]);
+
             // Export the pin if it's not already
-            if($this->gpioController->isExported($this->gpioPins[$pinCounter]) === false) {
+            if($this->gpioController->isExported($gpioPort) === false) {
                 $this->gpioController->export(
-                    $this->gpioPins[$pinCounter],
+                    $gpioPort,
                     GPIO::MODE_OUTPUT
                 );
             }
 
             // Turn off the GPIO pin
             $this->gpioController->write(
-                $this->gpioPins[$pinCounter],
+                $gpioPort,
                 0
             );
 
@@ -136,7 +138,7 @@ class Motor
         // turn on/off each of the pins
         for ($i = 0; $i < 4; $i++) {
             $this->gpioController->write(
-                $this->gpioPins[$i],
+                intval($this->gpioPins[$i]),
                 $this->stepSequence[$this->stepIndex][$i]
             );
         }
