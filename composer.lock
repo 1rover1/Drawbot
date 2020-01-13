@@ -4,60 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "870aeab745e0fbe39785e95d63db9dee",
-    "content-hash": "efc8abe18953aa8fde8bc66732439aa0",
+    "content-hash": "3858f2471d64d9d3bbf50d5f615a955b",
     "packages": [
-        {
-            "name": "league/climate",
-            "version": "3.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/climate.git",
-                "reference": "834cb907c89eb31e2171b68ee25c0ed26c8f34f4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/climate/zipball/834cb907c89eb31e2171b68ee25c0ed26c8f34f4",
-                "reference": "834cb907c89eb31e2171b68ee25c0ed26c8f34f4",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0",
-                "seld/cli-prompt": "~1.0"
-            },
-            "require-dev": {
-                "mikey179/vfsstream": "~1.4",
-                "mockery/mockery": "dev-master",
-                "phpunit/phpunit": "~4.6"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "League\\CLImate\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Joe Tannenbaum",
-                    "email": "hey@joe.codes",
-                    "homepage": "http://joe.codes/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP's best friend for the terminal. CLImate allows you to easily output colored text, special formats, and more.",
-            "keywords": [
-                "cli",
-                "colors",
-                "command",
-                "php",
-                "terminal"
-            ],
-            "time": "2015-08-13 16:50:51"
-        },
         {
             "name": "phenx/php-svg-lib",
             "version": "0.1",
@@ -90,55 +38,7 @@
             ],
             "description": "A library to read, parse and export to PDF SVG files.",
             "homepage": "https://github.com/PhenX/php-svg-lib",
-            "time": "2015-05-06 18:49:49"
-        },
-        {
-            "name": "seld/cli-prompt",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Seldaek/cli-prompt.git",
-                "reference": "fe114c7a6ac5cb0ce76932ae4017024d9842a49c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/cli-prompt/zipball/fe114c7a6ac5cb0ce76932ae4017024d9842a49c",
-                "reference": "fe114c7a6ac5cb0ce76932ae4017024d9842a49c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Seld\\CliPrompt\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jordi Boggiano",
-                    "email": "j.boggiano@seld.be"
-                }
-            ],
-            "description": "Allows you to prompt for user input on the command line, and optionally hide the characters they type",
-            "keywords": [
-                "cli",
-                "console",
-                "hidden",
-                "input",
-                "prompt"
-            ],
-            "time": "2015-04-30 20:24:49"
+            "time": "2015-05-06T18:49:49+00:00"
         },
         {
             "name": "timesplinter/gphpio",
@@ -187,7 +87,7 @@
                 "rpi",
                 "rpi2"
             ],
-            "time": "2018-01-29 11:21:08"
+            "time": "2018-01-29T11:21:08+00:00"
         }
     ],
     "packages-dev": [],
