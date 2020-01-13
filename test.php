@@ -3,8 +3,8 @@
 
 include('vendor/autoload.php');
 
-use Rover2011\AnnDroidArtist\Plotter;
-use Rover2011\AnnDroidArtist\Driver\SurfaceAnnDroid;
+use Rover2011\Drawbot\Plotter;
+use Rover2011\Drawbot\Driver\SurfaceAnnDroid;
 use Svg\Document;
 
 $startTime = time();

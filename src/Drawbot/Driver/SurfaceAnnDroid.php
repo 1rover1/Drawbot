@@ -1,8 +1,8 @@
 <?php
 
-namespace Rover2011\AnnDroidArtist\Driver;
+namespace Rover2011\Drawbot\Driver;
 
-use Rover2011\AnnDroidArtist\Plotter;
+use Rover2011\Drawbot\Plotter;
 use Svg\Style;
 use Svg\Surface\SurfaceInterface;
 

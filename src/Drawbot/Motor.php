@@ -1,6 +1,6 @@
 <?php
 
-namespace Rover2011\AnnDroidArtist;
+namespace Rover2011\Drawbot;
 
 use timesplinter\gphpio\RPi;
 use timesplinter\gphpio\GPIO;

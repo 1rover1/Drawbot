@@ -1,8 +1,8 @@
 <?php
 
-namespace Rover2011\AnnDroidArtist;
+namespace Rover2011\Drawbot;
 
-use Rover2011\AnnDroidArtist\Motor;
+use Rover2011\Drawbot\Motor;
 
 class Plotter
 {
