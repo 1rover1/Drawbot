@@ -15,6 +15,6 @@
     },
     "require": {
         "timesplinter/gphpio": "*@dev",
-        "phenx/php-svg-lib": "^0.1.0"
+        "phenx/php-svg-lib": "^0.5.1"
     }
 }
